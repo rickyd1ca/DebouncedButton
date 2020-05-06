@@ -16,7 +16,7 @@ limitations under the License.
 #include "DebouncedButton.h"
 
 DebouncedButton::DebouncedButton(int pin) {
-  pin = pin;
+  this->pin = pin;
   lastState = LOW;
   debouncedState = LOW;
   lastDebounceTime = 0;
