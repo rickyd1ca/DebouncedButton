@@ -17,40 +17,21 @@ limitations under the License.
 
 DebouncedButton::DebouncedButton(int pin) {
   this->pin = pin;
-  lastState = LOW;
-  debouncedState = LOW;
-  lastDebounceTime = 0;
-  transition = false;
-  pinMode(pin, INPUT);
+
+  debouncer.attach(pin, INPUT); // Attach the debouncer to a pin with INPUT_PULLUP mode
+  debouncer.interval(DEBOUNCE_BUTTON_DELAY); // Use a debounce interval of 25 milliseconds
 }
 
 void DebouncedButton::read() {
-  int reading = digitalRead(pin);
-  transition = false;
-
-  if (reading != lastState) {
-    lastDebounceTime = millis();
-    lastState = reading;
-  }
-
-  if ((millis() - lastDebounceTime) > DebouncedButton::DEBOUNCE_BUTTON_DELAY) {
-    // whatever the reading is at, it's been there for longer than the debounce
-    // delay, so take it as the actual current state:
-
-    // if the button state has changed:
-    if (lastState != debouncedState) {
-      debouncedState = lastState;
-      transition = true;
-    }
-  }
+  debouncer.update();
 }
 
 int DebouncedButton::getState() {
-  return lastState;
+  return debouncer.read();
 }
 
 boolean DebouncedButton::getTransition() {
-  return transition;
+  return debouncer.fell() || debouncer.rose();
 }
 
 

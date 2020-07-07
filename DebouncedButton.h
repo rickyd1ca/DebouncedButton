@@ -16,6 +16,7 @@ limitations under the License.
 #ifndef DebouncedButton_h
 #define DebouncedButton_h
 #include "Arduino.h"
+#include <Bounce2.h>
 
 class DebouncedButton {
 
@@ -27,11 +28,7 @@ public:
 
 private:
   static const uint8_t DEBOUNCE_BUTTON_DELAY = 50;
-  unsigned long lastDebounceTime;
-  uint8_t lastState;
-  uint8_t debouncedState;
+  Bounce debouncer;
   uint8_t pin;
-  boolean transition;
-
 };
 #endif
